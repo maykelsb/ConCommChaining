@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+/**
+* This file is part of a solution for Console Command Chaining test.
+ *
+ * @author Maykel S. Braz <maykelsb@yahoo.com.br>
+ * @link https://github.com/mbessolov/test-tasks/blob/master/7.md Test description.
+ */
+require __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+
+$application->add(new ChainingCommand());
+
+$application->run();
