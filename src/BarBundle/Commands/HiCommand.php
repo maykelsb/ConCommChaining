@@ -1,8 +1,8 @@
 <?php
 /**
- * A simple command to evaluate ChainingCommand implementation.
+ * This code is part of a solution to Console Command Chaining.
  *
- * @author Maykel S. Braz <maykelsb@yahoo.com.br>
+ * @link https://github.com/mbessolov/test-tasks/blob/master/7.md Test description.
  */
 
 namespace BarBundle\Commands;
@@ -12,11 +12,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * A simple command to evaluate ChainingCommand implementation.
  *
+ * @author Maykel S. Braz <maykelsb@yahoo.com.br>
  */
 class HiCommand extends Command
 {
-
     /**
      * Configures the hi command.
      *
