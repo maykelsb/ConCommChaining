@@ -9,9 +9,12 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
+use BarBundle\Commands\HiCommand;
+use FooBundle\Commands\HelloCommand;
 
 $application = new Application();
 
-$application->add(new ChainingCommand());
+$application->add(new HiCommand());
+$application->add(new HelloCommand());
 
 $application->run();
