@@ -14,7 +14,7 @@ use FooBundle\Commands\HelloCommand;
 
 $application = new Application();
 
-$application->add(new HiCommand());
-$application->add(new HelloCommand());
+//$application->add(new HiCommand());
+//$application->add(new HelloCommand());
 
 $application->run();
