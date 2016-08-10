@@ -16,6 +16,9 @@ class CommandChainPass implements CompilerPassInterface
         }
 
         $definition = $container->findDefinition('chaincommand.command_chain');
+
+
+        $definition->clearTags();
         $taggedServices = $container->findTaggedServiceIds('chaincommand.chained');
 
         $servicesWithChain = [];
@@ -46,18 +49,12 @@ class CommandChainPass implements CompilerPassInterface
             var_dump($command);
 
 
-
-//            Command $command = $container->get($service);
-//            var_dump(
-//                ((Command)$command)->getCode()
-//            );
-
 //            var_dump($command);
         }
 
 
 
-//        var_dump($servicesWithChain);
+        var_dump($servicesWithChain);
 //        die();
     }
 }
