@@ -1,0 +1,3 @@
+services:
+    chaincommand.command_chain:
+        class: ChainCommandBundle\Chain\CommandChain
