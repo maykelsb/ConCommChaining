@@ -1,8 +1,7 @@
 {
     "name": "maykelsb/ConCommChaining",
     "require": {
-        "symfony/console": "^3.1",
-        "psr/log": "^1.0"
+        "symfony/symfony": "^3.1"
     },
     "autoload": {
         "psr-4": {
