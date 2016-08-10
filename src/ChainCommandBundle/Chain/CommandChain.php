@@ -13,4 +13,11 @@ class CommandChain
     {
         $this->commands[] = $command;
     }
+
+    public function getCommandChain($chainedTo)
+    {
+        if (array_key_exists($chainedTo, $this->commands)) {
+            return $this->commands[$chainedTo];
+        }
+    }
 }
