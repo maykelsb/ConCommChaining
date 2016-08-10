@@ -5,9 +5,8 @@
  * @author Maykel S. Braz <maykelsb@yahoo.com.br>
  */
 
-namespace FooBundle\Commands;
+namespace FooBundle\Command;
 
-//use Symfony\Component\Console\Command\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

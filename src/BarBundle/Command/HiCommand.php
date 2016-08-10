@@ -5,9 +5,9 @@
  * @link https://github.com/mbessolov/test-tasks/blob/master/7.md Test description.
  */
 
-namespace BarBundle\Commands;
+namespace BarBundle\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Maykel S. Braz <maykelsb@yahoo.com.br>
  */
-class HiCommand extends Command
+class HiCommand extends ContainerAwareCommand
 {
     /**
      * Configures the hi command.

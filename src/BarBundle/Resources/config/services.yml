@@ -1,0 +1,5 @@
+services:
+    bar.hi_command:
+        class: BarBundle\Command\HiCommand
+        tags:
+            - { name: console.command }
