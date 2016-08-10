@@ -1,0 +1,6 @@
+services:
+    bar2.hi_command:
+        class: BarBundle2\Command\HiCommand
+        tags:
+            - { name: console.command }
+            - { name: chaincommand.chained, chainto: foo.hello_command }
