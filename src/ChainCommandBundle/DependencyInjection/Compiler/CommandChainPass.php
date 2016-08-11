@@ -1,4 +1,9 @@
 <?php
+/**
+ *
+ */
+
+
 
 namespace ChainCommandBundle\DependencyInjection\Compiler;
 
@@ -6,11 +11,14 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
+use ChainCommandBundle\Command\DummyCommand;
+
 /**
  *
  *
  *
  * Commands are identified by its service names.
+ * @uses ChainCommandBundle\Command\DummyCommand
  */
 class CommandChainPass implements CompilerPassInterface
 {
@@ -61,7 +69,6 @@ class CommandChainPass implements CompilerPassInterface
         return $this->container;
     }
 
-
     public function process(ContainerBuilder $container)
     {
         if (!$container->has('chaincommand.command_chain')) {
@@ -73,14 +80,7 @@ class CommandChainPass implements CompilerPassInterface
 
         foreach ($this->commandChains as $service => $chainedCommands) {
             foreach ($chainedCommands as $chainedComm) {
-//                $chainedCommDef = $container->findDefinition($chainedComm);
-//                $container->setDefinition("{$chainedComm}_chained", clone $chainedCommDef);
-//
-//                $commandClass = $chainedCommDef->getClass();
-//                $command = new $commandClass();
-//
-//                $chainedCommDef->setClass('ChainCommandBundle\Command\ChainedCommand')
-//                    ->addMethodCall('setName', [$command->getName()]);
+                $this->hideChainedCommand($chainedComm);
             }
 
             $mainCommandDef = $container->findDefinition($service);
@@ -102,23 +102,27 @@ class CommandChainPass implements CompilerPassInterface
 
     }
 
-    protected function cloneChainedCommand($serviceId)
+    /**
+     *
+     * @param string $serviceId The service id of the chained command.
+     */
+    protected function hideChainedCommand($serviceId)
     {
-        $serviceDefinition = $container->findDefinition($serviceId);
+        // -- Finding the service definition
+        $servDefinition = $this->getContainer()
+            ->findDefinition($serviceId);
 
+        // -- Hidding it in another service, so it can only be called from its main command
+        $this->getContainer()->setDefinition(
+            $serviceId . self::CHAINEDCOMM_POSFIX,
+            clone $servDefinition
+        );
 
-
-//                $chainedCommDef =
-//                $container->setDefinition("{$chainedComm}_chained", clone $chainedCommDef);
-//
-//                $commandClass = $chainedCommDef->getClass();
-//                $command = new $commandClass();
-//
-//                $chainedCommDef->setClass('ChainCommandBundle\Command\ChainedCommand')
-//                    ->addMethodCall('setName', [$command->getName()]);
+        // -- Changing the class definition of the service to a dummy command class
+        $servDefinition->setClass(DummyCommand::class)
+            // -- Changing the name of the dummy command so it can be called in place
+            ->addMethodCall('setName', [$this->retrieveCommandName($servDefinition)]);
     }
-
-
 
     /**
      * Finds out the services tagged with "chaincommand.chained" and builds the
