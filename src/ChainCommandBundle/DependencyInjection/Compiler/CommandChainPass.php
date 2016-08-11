@@ -1,9 +1,9 @@
 <?php
 /**
+ * This code is part of my solution to Console Command Chaining.
  *
+ * @link https://github.com/mbessolov/test-tasks/blob/master/7.md
  */
-
-
 
 namespace ChainCommandBundle\DependencyInjection\Compiler;
 
@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 use ChainCommandBundle\Command\DummyCommand;
+use ChainCommandBundle\Command\MasterCommand;
 
 /**
  *
@@ -71,39 +72,53 @@ class CommandChainPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('chaincommand.command_chain')) {
-            return;
-        }
-
         $this->setContainer($container);
+
+        // -- Finding out which commands are chained and to whom.
         $this->loadChainedCommands();
 
-        
+        // -- Changing services so they can work as a chain of commands
         foreach ($this->commandChains as $service => $chainedCommands) {
             foreach ($chainedCommands as $chainedComm) {
+                // -- Hidding chained commands
                 $this->hideChainedCommand($chainedComm);
             }
-
-            $mainCommandDef = $container->findDefinition($service);
-            $container->setDefinition("{$service}_master", clone $mainCommandDef);
-            $mainCommandDef->addMethodCall('setName', [
-                $this->retrieveCommandName($mainCommandDef)
-            ])->setClass("ChainCommandBundle\Command\MasterCommand")
-                ->addMethodCall('setMainCommand', [$service])
-                ->addMethodCall('setChainedCommands', [$chainedCommands]);
-
+            // -- Changing the main command so it can call all its chain
+            $this->activeMainCommandChain($service, $chainedCommands);
         }
     }
 
-    protected function cloneMainCommand(
-        Definition $command,
-        $serviceId,
-        array $chainedCommands
-    ) {
+    protected function activeMainCommandChain($serviceId, array $chainedCommands)
+    {
+        // -- Hidding the master command in another service, so it can only be
+        // -- called from MainCommand class
+        $servDefinition = $this->getContainer()->findDefinition($serviceId);
+        $this->getContainer()->setDefinition(
+            $serviceId . self::MAINCOMM_POSFIX,
+            clone $servDefinition
+        );
 
+        // -- Storing the command name as it is class based, when the class
+        // -- is changed, the command name will change too.
+        $commandName = $this->retrieveCommandName($servDefinition);
+
+        // -- Reconfiguring the MasterCommand so it can answer calls of the main
+        // -- command and call its chained commands.
+        $servDefinition->setClass(MasterCommand::class)
+            // -- Changing name of MasterCommand
+            ->addMethodCall('setName', [$commandName])
+            // -- Setting which one is the main command on the chain
+            ->addMethodCall('setMainCommand', [$serviceId])
+            // -- Setting its command chain
+            ->addMethodCall('setChainedCommands', [$chainedCommands]);
     }
 
     /**
+     * Hide all chained commands and putting a dummy command on its places.
+     *
+     * Create a new service with a posfix to avoid the chainned commands to be
+     * called directly. Every time they are called in the console, the
+     * DummyCommand will be used in its place.
      *
      * @param string $serviceId The service id of the chained command.
      */

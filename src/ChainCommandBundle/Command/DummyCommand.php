@@ -14,7 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * This is a dummy command which is used to be called in place of a chained command.
  *
- * The switch between this class and the chained command occurs in CommandChainPass.
+ * The switch between this class and the chained command occurs in
+ * CommandChainPass::hideChainedCommand().
  *
  * @author Maykel S. Braz <maykelsb@yahoo.com.br>
  */
@@ -37,4 +38,3 @@ class DummyCommand extends ContainerAwareCommand
         $output->writeln('não chama eu');
     }
 }
-
