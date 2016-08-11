@@ -78,6 +78,7 @@ class CommandChainPass implements CompilerPassInterface
         $this->setContainer($container);
         $this->loadChainedCommands();
 
+        
         foreach ($this->commandChains as $service => $chainedCommands) {
             foreach ($chainedCommands as $chainedComm) {
                 $this->hideChainedCommand($chainedComm);

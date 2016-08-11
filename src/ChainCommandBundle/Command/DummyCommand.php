@@ -37,3 +37,4 @@ class DummyCommand extends ContainerAwareCommand
         $output->writeln('não chama eu');
     }
 }
+
