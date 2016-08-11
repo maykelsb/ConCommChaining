@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\DependencyInjection\Definition;
 
 class CommandChainPass implements CompilerPassInterface
 {
@@ -15,10 +16,6 @@ class CommandChainPass implements CompilerPassInterface
             return;
         }
 
-        $definition = $container->findDefinition('chaincommand.command_chain');
-
-
-        $definition->clearTags();
         $taggedServices = $container->findTaggedServiceIds('chaincommand.chained');
 
         $servicesWithChain = [];
@@ -32,29 +29,21 @@ class CommandChainPass implements CompilerPassInterface
                 if (!in_array($id, $servicesWithChain[$attributes['chainto']])) {
                     $servicesWithChain[$attributes['chainto']][] = $id;
                 }
-//                var_dump($definition->addMethodCall('addCommand', [
-//                    new Reference($id),
-//                    $attributes['chainto']
-//                ]));
-
             }
         }
 
         foreach ($servicesWithChain as $service => $chained) {
-            $command = $container->get($service)
-                ->setCode(function(InputInterface $input, OutputInterface $output){
-                $output->writeln('novo');
-            });
+            $mainCommandDef = $container->findDefinition($service);
 
-            var_dump($command);
+            $container->setDefinition("{$service}_original", clone $mainCommandDef);
 
 
-//            var_dump($command);
+            $definition = $container->findDefinition($service);
+            $definition->setClass("ChainCommandBundle\Command\MasterCommand");
+            $definition->addMethodCall('setName', ['foo:hello'])
+                ->addMethodCall('setMainCommand', [$service])
+                ->addMethodCall('setChainedCommands', [$chained]);
+
         }
-
-
-
-        var_dump($servicesWithChain);
-//        die();
     }
 }
