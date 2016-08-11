@@ -25,7 +25,7 @@ class HiCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $this->setName('bar:hi')
+        $this->setName('bar2:hi')
             ->setDescription('Use to say hi.')
             ->setHelp('This command allows you to say hi from Bar.');
     }
