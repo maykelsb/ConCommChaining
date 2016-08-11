@@ -15,8 +15,12 @@ use ChainCommandBundle\Command\DummyCommand;
 use ChainCommandBundle\Command\MasterCommand;
 
 /**
+ * This class identifies chained command and modify the container so they can be executed all together.
  *
- *
+ * Commands registered with the tag "chaincommand.chained" become chained commands
+ * of the command informed on the tag attribute "chainto". When the main command
+ * is called, it execute first, and, after that, all of its channed commands are
+ * executed too.
  *
  * Commands are identified by its service names.
  * @uses ChainCommandBundle\Command\DummyCommand
@@ -70,6 +74,12 @@ class CommandChainPass implements CompilerPassInterface
         return $this->container;
     }
 
+    /**
+     * Modifying the service container to hide chained commands and activate
+     * the ability of the main command to be executed with its command chain.
+     *
+     * @param ContainerBuilder $container Container builder.
+     */
     public function process(ContainerBuilder $container)
     {
         $this->setContainer($container);
@@ -88,6 +98,17 @@ class CommandChainPass implements CompilerPassInterface
         }
     }
 
+    /**
+     * Active the ability of the main command to call all of it chain of commands.
+     *
+     * Create a new service with a posfix to identify the main command and set
+     * a new class Definition for the main command. This class is the MasterCommand
+     * class which takes a main command and its command chain, so, when the main
+     * command is called, it is executed with all its chained commands.
+     *
+     * @param string $serviceId The service id of the main command.
+     * @param string[] $chainedCommands
+     */
     protected function activeMainCommandChain($serviceId, array $chainedCommands)
     {
         // -- Hidding the master command in another service, so it can only be
@@ -207,7 +228,7 @@ class CommandChainPass implements CompilerPassInterface
         // -- It is not already discovered?
         if (!key_exists($commandClass, $this->commandNames)) {
 
-            // -- So, find it out
+            // -- So, find it out and store
             $command = new $commandClass();
             $this->commandNames[$commandClass] = $command->getName();
         }
