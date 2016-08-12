@@ -105,6 +105,9 @@ class MasterCommand extends ContainerAwareCommand
         $this->getLogger()->info("Execution of {$this->getName()} chain completed.");
     }
 
+    /**
+     * Generating log header.
+     */
     protected function logHeader()
     {
         $this->getLogger()->info("{$this->getName()} is a master command of a command"
