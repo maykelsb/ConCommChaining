@@ -89,12 +89,13 @@ class CommandChainPass implements CompilerPassInterface
 
         // -- Changing services so they can work as a chain of commands
         foreach ($this->commandChains as $mainCommand => $chainedCommands) {
+            // -- Changing the main command so it can call all its chain
+            $this->activeMainCommandChain($mainCommand, $chainedCommands);
+
             foreach ($chainedCommands as $chainedComm) {
                 // -- Hidding chained commands
                 $this->hideChainedCommand($chainedComm, $mainCommand);
             }
-            // -- Changing the main command so it can call all its chain
-            $this->activeMainCommandChain($mainCommand, $chainedCommands);
         }
     }
 
@@ -160,7 +161,7 @@ class CommandChainPass implements CompilerPassInterface
         $servDefinition->setClass(DummyCommand::class)
             // -- Changing the name of the dummy command so it can be called in place
             ->addMethodCall('setName', [$commandName])
-            ->addMethodCall('setMainCommand', [$mainCommandServiceId]);
+            ->addMethodCall('setMainCommandServiceId', [$mainCommandServiceId]);
     }
 
     /**

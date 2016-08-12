@@ -22,19 +22,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DummyCommand extends ContainerAwareCommand
 {
     /**
-     * @var string Stores the main command name.
+     * @var string Stores the main command id.
      */
-    protected $mainCommand;
+    protected $mainCommandServiceId;
 
     /**
-     * Set the main command name.
+     * Set the main command service id.
      *
-     * @param string $mainCommand Main command name.
+     * @param string $mainCommandServiceId Main command service id.
      * @return \ChainCommandBundle\Command\DummyCommand
      */
-    public function setMainCommand($mainCommand)
+    public function setMainCommandServiceId($mainCommandServiceId)
     {
-        $this->mainCommand = $mainCommand;
+        $this->mainCommandServiceId = $mainCommandServiceId;
         return $this;
     }
 
@@ -43,9 +43,11 @@ class DummyCommand extends ContainerAwareCommand
      *
      * @return string
      */
-    public function getMainCommand()
+    public function getMainCommandName()
     {
-        return $this->mainCommand;
+        return $this->getContainer()
+            ->get($this->mainCommandServiceId)
+            ->getName();
     }
 
     /**
@@ -63,7 +65,7 @@ class DummyCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
         $message = "Error: {$this->getName()} command is a member of "
-            . "{$this->getMainCommand()} command chain and cannot be executed "
+            . "{$this->getMainCommandName()} command chain and cannot be executed "
             . "on its own.";
 
         $output->writeln($message);
