@@ -1,1 +1,5 @@
 services:
+    ccc_log_formatter:
+        class: Symfony\Bridge\Monolog\Formatter\ConsoleFormatter
+        arguments:
+            - "[%%datetime%%] %%message%%\n"

@@ -66,3 +66,11 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+monolog:
+    handlers:
+        file:
+            bubble: false
+            type: stream
+            channels: ["!event"]
+            formatter: ccc_log_formatter

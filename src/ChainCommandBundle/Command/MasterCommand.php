@@ -34,6 +34,20 @@ class MasterCommand extends ContainerAwareCommand
     protected $chainedCommands = [];
 
     /**
+     * @var Psr\Log\LoggerInterface Logger interface.
+     */
+    protected $logger;
+
+    protected function getLogger()
+    {
+        if (is_null($this->logger)) {
+            $this->logger = $this->getContainer()->get('logger');
+        }
+
+        return $this->logger;
+    }
+
+    /**
      * Defines the id of the command service.
      *
      * @param string $commandId Service id of main command.
@@ -76,13 +90,31 @@ class MasterCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output) {
         $container = $this->getContainer();
 
+        $this->logHeader();
+
         $container->get($this->mainCommand . CommandChainPass::MAINCOMM_POSFIX)
             ->execute($input, $output);
+        $this->getLogger()->info("Executing {$this->getName()} chain members:");
 
         foreach ($this->chainedCommands as $serviceName) {
             $container
                 ->get($serviceName . CommandChainPass::CHAINEDCOMM_POSFIX)
                 ->execute($input, $output);
         }
+
+        $this->getLogger()->info("Execution of {$this->getName()} chain completed.");
     }
+
+    protected function logHeader()
+    {
+        $this->getLogger()->info("{$this->getName()} is a master command of a command"
+            . " chain that has registered member commands");
+        foreach ($this->chainedCommands as $serviceName)
+        {
+            $this->getLogger()->info("{$serviceName} registered as a member of "
+                . "{$this->getName()} command chain");
+        }
+        $this->getLogger()->info("Executing {$this->getName()} command itself first:");
+    }
+
 }
