@@ -96,9 +96,9 @@ class MasterCommand extends ContainerAwareCommand
             ->execute($input, $output);
         $this->getLogger()->info("Executing {$this->getName()} chain members:");
 
-        foreach ($this->chainedCommands as $serviceName) {
+        foreach ($this->chainedCommands as $commandInfo) {
             $container
-                ->get($serviceName . CommandChainPass::CHAINEDCOMM_POSFIX)
+                ->get($commandInfo['serviceid'] . CommandChainPass::CHAINEDCOMM_POSFIX)
                 ->execute($input, $output);
         }
 
@@ -109,9 +109,9 @@ class MasterCommand extends ContainerAwareCommand
     {
         $this->getLogger()->info("{$this->getName()} is a master command of a command"
             . " chain that has registered member commands");
-        foreach ($this->chainedCommands as $serviceName)
+        foreach ($this->chainedCommands as $commandInfo)
         {
-            $this->getLogger()->info("{$serviceName} registered as a member of "
+            $this->getLogger()->info("{$commandInfo['commandname']} registered as a member of "
                 . "{$this->getName()} command chain");
         }
         $this->getLogger()->info("Executing {$this->getName()} command itself first:");

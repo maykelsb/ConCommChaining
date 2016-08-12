@@ -89,13 +89,14 @@ class CommandChainPass implements CompilerPassInterface
 
         // -- Changing services so they can work as a chain of commands
         foreach ($this->commandChains as $mainCommand => $chainedCommands) {
-            // -- Changing the main command so it can call all its chain
-            $this->activeMainCommandChain($mainCommand, $chainedCommands);
-
             foreach ($chainedCommands as $chainedComm) {
                 // -- Hidding chained commands
-                $this->hideChainedCommand($chainedComm, $mainCommand);
+                $this->hideChainedCommand($chainedComm['serviceid'], $mainCommand);
             }
+
+            // -- Changing the main command so it can call all its chain
+            // -- Its called after chained processing so the command names are updated
+            $this->activeMainCommandChain($mainCommand);
         }
     }
 
@@ -108,10 +109,12 @@ class CommandChainPass implements CompilerPassInterface
      * command is called, it is executed with all its chained commands.
      *
      * @param string $serviceId The service id of the main command.
-     * @param string[] $chainedCommands
      */
-    protected function activeMainCommandChain($serviceId, array $chainedCommands)
+    protected function activeMainCommandChain($serviceId)
     {
+        // -- Getting the updated commandChains (setCommandName)
+        $chainedCommands = $this->commandChains[$serviceId];
+
         // -- Hidding the master command in another service, so it can only be
         // -- called from MainCommand class
         $servDefinition = $this->getContainer()->findDefinition($serviceId);
@@ -156,8 +159,12 @@ class CommandChainPass implements CompilerPassInterface
             clone $servDefinition
         );
 
-        // -- Changing the class definition of the service to a dummy command class
+        // -- Saving current command name to set in the dummy
         $commandName = $this->retrieveCommandName($servDefinition);
+        // -- Storing the command name within serviceid to use in MasterCommand
+        $this->setCommandName($serviceId, $commandName);
+
+        // -- Changing the class definition of the service to a dummy command class
         $servDefinition->setClass(DummyCommand::class)
             // -- Changing the name of the dummy command so it can be called in place
             ->addMethodCall('setName', [$commandName])
@@ -168,13 +175,14 @@ class CommandChainPass implements CompilerPassInterface
      * Finds out the services tagged with "chaincommand.chained" and builds the
      * CommandChainPass::$commandChains array.
      *
-     * It uses the tag atribute 'chainto' to find out which is its main main command.
+     * It uses the tag atribute 'chainto' to find out which is its main command.
      *
      * @example
      * <code>
      * $this->commandChains = [
      *   'mainServiceId' => [
-     *      'chainedServiceId1', 'chainedServiceId2'
+     *      ['serviceid' => 'chainedServiceId1'],
+     *      ['serviceid' => 'chainedServiceId2']
      *   ]
      * ];
      * </code>
@@ -183,6 +191,7 @@ class CommandChainPass implements CompilerPassInterface
     {
         $taggedServices = $this->getContainer()
             ->findTaggedServiceIds('chaincommand.chained');
+
         foreach ($taggedServices as $chainedCommand => $tags) {
 
             // -- processing tag properties
@@ -206,12 +215,12 @@ class CommandChainPass implements CompilerPassInterface
     {
         if (!key_exists($mainCommand, $this->commandChains)) {
             // -- Starting a command chain with its main command
-            $this->commandChains[$mainCommand] = [$chainedCommand];
+            $this->commandChains[$mainCommand] = [['serviceid' => $chainedCommand]];
         }
 
-        if (!in_array($chainedCommand, $this->commandChains[$mainCommand])) {
-            // -- Adding commands to a exiting chain, avoding repetitions
-            $this->commandChains[$mainCommand][] = $chainedCommand;
+        if (!in_array(['serviceid' => $chainedCommand], $this->commandChains[$mainCommand])) {
+            // -- Adding commands to a existing chain, avoiding repetitions
+            $this->commandChains[$mainCommand][] = ['serviceid' => $chainedCommand];
         }
     }
 
@@ -237,5 +246,37 @@ class CommandChainPass implements CompilerPassInterface
         }
 
         return $this->commandNames[$commandClass];
+    }
+
+    /**
+     * Updates $this->$commandChains with command names.
+     *
+     * Finds every occurrence of $serviceId and update it with CommandName. The
+     * command name is usend in MasterCommand to save log messages.
+     *
+     * Each call of this method, updates one command name.
+     *
+     * @param string $serviceId Service id of a chainned command to be updated.
+     * @param string $commandName Command name to update.
+     * @example
+     * <code>
+     * $this->commandChains = [
+     *   'mainServiceId' => [
+     *      ['serviceid' => 'chainedServiceId1', 'commandname' => 'commandName1'],
+     *      ['serviceid' => 'chainedServiceId2', 'commandname' => 'commandName2']
+     *   ]
+     * ];
+     * </code>
+     */
+    protected function setCommandName($serviceId, $commandName)
+    {
+        foreach ($this->commandChains as &$chainedCommands) {
+            foreach ($chainedCommands as &$command) {
+                if ($serviceId == $command['serviceid']) {
+                    $command['commandname'] = $commandName;
+                    break 2;
+                }
+            }
+        }
     }
 }
