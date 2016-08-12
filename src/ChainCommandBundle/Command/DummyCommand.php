@@ -22,6 +22,33 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DummyCommand extends ContainerAwareCommand
 {
     /**
+     * @var string Stores the main command name.
+     */
+    protected $mainCommand;
+
+    /**
+     * Set the main command name.
+     *
+     * @param string $mainCommand Main command name.
+     * @return \ChainCommandBundle\Command\DummyCommand
+     */
+    public function setMainCommand($mainCommand)
+    {
+        $this->mainCommand = $mainCommand;
+        return $this;
+    }
+
+    /**
+     * Retrieves main command name.
+     *
+     * @return string
+     */
+    public function getMainCommand()
+    {
+        return $this->mainCommand;
+    }
+
+    /**
      * A basic configuration.
      */
     protected function configure() {
@@ -35,6 +62,10 @@ class DummyCommand extends ContainerAwareCommand
      * @param OutputInterface $output Common output interface.
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln('não chama eu');
+        $message = "Error: {$this->getName()} command is a member of "
+            . "{$this->getMainCommand()} command chain and cannot be executed "
+            . "on its own.";
+
+        $output->writeln($message);
     }
 }
