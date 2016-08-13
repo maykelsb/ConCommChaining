@@ -20,9 +20,10 @@ This are the base commands:
 * **MasterCommand**: Each service command with a command chain is substituted by one of this. It register its main command and chained commands, when it is called, all of them is called.
 
 ### Service changing flow
-Imagine this commands:
+Imagine this set of commands:
 * foo:hello (foo.hello_command)
 * bar:hi (bar.hi_command)
+
 If you register bar:hi as a chained command of foo:hello this is what happens behind courtains:
 
 + bar.hi_command definition is cloned and registered as bar.hi_command_chained.
