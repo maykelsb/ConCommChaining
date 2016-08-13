@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\FooBundle\Command;
+namespace FooBundle\Tests\Command;
 
 use FooBundle\Command\HelloCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -9,12 +9,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class HelloCommandTest extends KernelTestCase
 {
-    public function testGetName()
-    {
-        $command = new HelloCommand();
-        $this->assertEquals('foo:hello', $command->getName());
-    }
-
     public function testExecute()
     {
         $kernel = $this->createKernel();
@@ -25,11 +19,11 @@ class HelloCommandTest extends KernelTestCase
 
         $comm = $app->find('foo:hello');
         $commTester = new CommandTester($comm);
-        $commTester->execute([
+        $exitCode = $commTester->execute([
             'command' => $comm->getName()
         ]);
 
-        $output = $commTester->getDisplay();
-        $this->assertEquals("Hello from Foo!\n", $output);
+        $this->assertEquals(0, $exitCode, 'Returns 0 in case of success');
+        $this->assertEquals("Hello from Foo!\n", $commTester->getDisplay());
     }
 }
