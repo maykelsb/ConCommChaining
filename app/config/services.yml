@@ -1,7 +1,6 @@
 # Learn more about services, parameters and containers at
 
 imports:
-    - { resource: "@ChainCommandBundle/Resources/config/services.yml" }
     - { resource: "@FooBundle/Resources/config/services.yml" }
     - { resource: "@BarBundle/Resources/config/services.yml" }
     - { resource: "@BarBundle2/Resources/config/services.yml" }

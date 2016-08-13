@@ -42,7 +42,6 @@ Right now, you will have to copy the src folder content to your project and made
 
 * Copy src/ChainCommandBundle to your project src folder
 * Register the ChainCommandBundle in your AppKernel
-* Add `- { resource: "@ChainCommandBundle/Resources/config/services.yml" }` to your import section on `app/config/services.yml`
 * On you `app/config/config.yml` configure monolog as shown bellow:
 ```
 monolog:
