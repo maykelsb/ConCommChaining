@@ -35,4 +35,4 @@ If you register bar:hi as a chained command of foo:hello this is what happens:
 After that, every time that foo:hello is called, a MasterCommand is executed and run its main command and its chained commands. And, every time
 that bar:hi command is called, an error message is issued by DummyCommand.
 
-As the MasterCommand run a command using its service name (the one with our custom posfix), the correct service will be allways be called.
+As MasterCommand run commands using its service name (the one with our custom posfix), only the actual command will be called.
