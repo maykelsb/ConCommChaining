@@ -22,6 +22,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DummyCommand extends ContainerAwareCommand
 {
     /**
+     * The true name of DummyCommand.
+     */
+    const DUMMY_COMM_NAME = 'ccc:dummy';
+
+    /**
      * @var string Stores the main command id.
      */
     protected $mainCommandServiceId;
@@ -54,7 +59,7 @@ class DummyCommand extends ContainerAwareCommand
      * A basic configuration.
      */
     protected function configure() {
-        $this->setName('ccc:dummy');
+        $this->setName(self::DUMMY_COMM_NAME);
     }
 
     /**
@@ -64,6 +69,11 @@ class DummyCommand extends ContainerAwareCommand
      * @param OutputInterface $output Common output interface.
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
+        if (self::DUMMY_COMM_NAME == $this->getName()) {
+            $output->writeln('This command is not intended to be called by its actual name.');
+            return 1;
+        }
+
         $message = "Error: {$this->getName()} command is a member of "
             . "{$this->getMainCommandName()} command chain and cannot be executed "
             . "on its own.";
