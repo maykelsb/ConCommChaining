@@ -36,3 +36,23 @@ After that, every time that foo:hello is called, a MasterCommand is executed and
 that bar:hi command is called, an error message is issued by DummyCommand.
 
 As MasterCommand run commands using its service name (the one with our custom posfix), only the actual command will be called.
+
+## Installation and use
+Right now, you will have to copy the src folder content to your project and made few adjusts. Later on, it will be provided as an external bundle.
+
+* Copy src/ChainCommandBundle to your project src folder
+* Register the ChainCommandBundle in your AppKernel
+* Add `- { resource: "@ChainCommandBundle/Resources/config/services.yml" }` to your import section on `app/config/services.yml`
+* On you `app/config/config.yml` configure monolog as indicated bellow:
+```
+monolog:
+    handlers:
+        file:
+            bubble: false
+            type: stream
+            channels: ["!event"]
+            formatter: ccc_log_formatter
+```
+Note: A fullstack Symfony is required.
+
+### Taggin commands
