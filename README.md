@@ -24,13 +24,13 @@ Imagine this set of commands:
 * foo:hello (foo.hello_command)
 * bar:hi (bar.hi_command)
 
-If you register bar:hi as a chained command of foo:hello this is what happens behind courtains:
+If you register bar:hi as a chained command of foo:hello this is what happens:
 
-+ bar.hi_command definition is cloned and registered as bar.hi_command_chained.
-+ bar.hi_command definition has its class switched to DummyCommand class and has his command name modified to bar:hi.
-+ foo.hello_command definition is cloned and registered as foo.hello_command_main.
-+ foo.hello_command definition has its class switched to MasterCommand class and has his command name modified to foo:hello.
++ bar.hi_command definition is cloned and registered as a new service called bar.hi_command_chained.
++ bar.hi_command definition has its class switched to DummyCommand and has his command name modified to bar:hi (otherwise its name would be ccc:dummy, by DummyCommand definition).
++ foo.hello_command definition is cloned and registered as a new service called foo.hello_command_main.
++ foo.hello_command definition has its class switched to MasterCommand and has his command name modified to foo:hello (otherwise its name would be ccc:master, by MasterCommand definition).
 + foo.hello_command, now a MasterCommand, load foo.hello_command_main as its main command and bar.hi_command_chained as its command chain.
 
 After that, every time that foo:hello is called, a MasterCommand is executed and run its main command and its chained commands. And, every time
-that bar:hi command is called, an error message is issued by its DummyCommand command.
+that bar:hi command is called, an error message is issued by DummyCommand.
