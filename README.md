@@ -43,7 +43,7 @@ Right now, you will have to copy the src folder content to your project and made
 * Copy src/ChainCommandBundle to your project src folder
 * Register the ChainCommandBundle in your AppKernel
 * Add `- { resource: "@ChainCommandBundle/Resources/config/services.yml" }` to your import section on `app/config/services.yml`
-* On you `app/config/config.yml` configure monolog as indicated bellow:
+* On you `app/config/config.yml` configure monolog as shown bellow:
 ```
 monolog:
     handlers:
@@ -56,3 +56,8 @@ monolog:
 Note: A fullstack Symfony is required.
 
 ### Taggin commands
+To chain commands, you have to tag a chained command with the `chaincommand.chained` tag and tell to wich command it is chained. This is
+done setting the main command service name. A sample tag: `- { name: chaincommand.chained, chainto: foo.hello_command }`.
+
+## Logging
+All log is registered inside the main log file corresponding to your enviroment. `dev.log` or `prod.log`.
