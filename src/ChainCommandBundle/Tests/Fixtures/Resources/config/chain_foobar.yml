@@ -1,0 +1,10 @@
+services:
+    ccc.command.foo:
+        class: ChainCommandBundle\Tests\Fixtures\Command\FooCommand
+        tags:
+            - { name: console.command }
+    ccc.command.bar:
+        class: ChainCommandBundle\Tests\Fixtures\Command\BarCommand
+        tags:
+            - { name: console.command }
+            - { name: chaincommand.chained, chainto: ccc.command.foo }

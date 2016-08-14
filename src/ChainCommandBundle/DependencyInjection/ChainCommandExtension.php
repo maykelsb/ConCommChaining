@@ -34,5 +34,4 @@ class ChainCommandExtension extends Extension
 
         $loader->load('services.yml');
     }
-
 }

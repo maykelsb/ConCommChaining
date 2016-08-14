@@ -5,36 +5,36 @@
  * @link https://github.com/mbessolov/test-tasks/blob/master/7.md
  */
 
-namespace ChainCommandBundle\Command;
+namespace ChainCommandBundle\Tests\Fixtures\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * This is a simple command class which says "bar".
+ * This is a simple command class which says "foo".
  *
  * It is used in CommandChain tests.
  * @author Maykel S. Braz <maykelsb@yahoo.com.br>
  */
-class BarCommand extends Command
+class FooCommand extends Command
 {
     /**
      * Set command configuration.
      */
     protected function configure() {
-        $this->setName('ccc:bar')
+        $this->setName('ccc:foo')
             ->setDescription('Used to test CommandChainBundle')
-            ->setHelp('This command allows you to sai "bar".');
+            ->setHelp('This command allows you to sai "foo".');
     }
 
     /**
-     * Say "bar".
+     * Say "foo".
      *
      * @param InputInterface $input
      * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln('bar');
+        $output->writeln('foo');
     }
 }
