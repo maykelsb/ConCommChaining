@@ -77,6 +77,3 @@ monolog:
             formatter: ccc_log_formatter
             level: info
             path: %kernel.logs_dir%/log_ccc.log
-        syslog_handler:
-            type: syslog
-            level: error
