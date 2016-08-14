@@ -22,7 +22,8 @@ class FooCommand extends Command
     /**
      * Set command configuration.
      */
-    protected function configure() {
+    protected function configure()
+    {
         $this->setName('ccc:foo')
             ->setDescription('Used to test CommandChainBundle')
             ->setHelp('This command allows you to sai "foo".');
@@ -34,7 +35,8 @@ class FooCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $output->writeln('foo');
     }
 }

@@ -58,7 +58,8 @@ class DummyCommand extends ContainerAwareCommand
     /**
      * A basic configuration.
      */
-    protected function configure() {
+    protected function configure()
+    {
         $this->setName(self::DUMMY_COMM_NAME);
     }
 
@@ -68,7 +69,8 @@ class DummyCommand extends ContainerAwareCommand
      * @param InputInterface $input Common input interface.
      * @param OutputInterface $output Common output interface.
      */
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         if (self::DUMMY_COMM_NAME == $this->getName()) {
             $output->writeln('This command is not intended to be called by its actual name.');
             return 1;

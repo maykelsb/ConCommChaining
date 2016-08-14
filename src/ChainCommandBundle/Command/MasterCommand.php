@@ -93,7 +93,8 @@ class MasterCommand extends ContainerAwareCommand
     /**
      * A basic configuration.
      */
-    protected function configure() {
+    protected function configure()
+    {
         $this->setName('ccc:master');
     }
 
@@ -166,12 +167,10 @@ class MasterCommand extends ContainerAwareCommand
     {
         $this->getLogger()->info("{$this->getName()} is a master command of a command"
             . " chain that has registered member commands");
-        foreach ($this->chainedCommands as $commandInfo)
-        {
+        foreach ($this->chainedCommands as $commandInfo) {
             $this->getLogger()->info("{$commandInfo['commandname']} registered as a member of "
                 . "{$this->getName()} command chain");
         }
         $this->getLogger()->info("Executing {$this->getName()} command itself first:");
     }
-
 }

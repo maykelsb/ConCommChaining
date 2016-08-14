@@ -22,7 +22,8 @@ class BarCommand extends Command
     /**
      * Set command configuration.
      */
-    protected function configure() {
+    protected function configure()
+    {
         $this->setName('ccc:bar')
             ->setDescription('Used to test CommandChainBundle')
             ->setHelp('This command allows you to sai "bar".');
@@ -34,7 +35,8 @@ class BarCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $output->writeln('bar');
     }
 }

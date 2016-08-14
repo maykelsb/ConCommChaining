@@ -44,7 +44,6 @@ class ChainCommandExtension extends Extension
     protected function loadChain(ContainerBuilder $container)
     {
         if ('test' == $container->getParameter("kernel.environment")) {
-
             $loader = new YamlFileLoader(
                 $container,
                 new FileLocator(__DIR__ . '/../Tests/Fixtures/Resources/config')
