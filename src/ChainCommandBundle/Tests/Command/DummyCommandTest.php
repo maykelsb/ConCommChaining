@@ -10,10 +10,8 @@ use ChainCommandBundle\Command\MasterCommand;
 use ChainCommandBundle\Tests\Fixtures\Command\BarCommand;
 use ChainCommandBundle\Tests\Fixtures\Command\FooCommand;
 use ChainCommandBundle\Tests\TraitChainCommandTest;
-
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -35,7 +33,7 @@ class DummyCommandTest extends KernelTestCase
         $comm = $app->find(DummyCommand::DUMMY_COMM_NAME);
         $commTester = new CommandTester($comm);
         $exitCode = $commTester->execute([
-            'command' => $comm->getName()
+            'command' => $comm->getName(),
         ]);
 
         $this->assertEquals(1, $exitCode, 'Returns %1 when called by its actual name.');

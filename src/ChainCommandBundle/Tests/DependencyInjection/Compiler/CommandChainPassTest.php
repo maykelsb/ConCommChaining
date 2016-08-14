@@ -31,10 +31,10 @@ class CommandChainPassTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('ccc.command.foo'));
         $this->assertTrue($container->hasDefinition('ccc.command.bar'));
         $this->assertTrue($container->hasDefinition(
-            'ccc.command.foo' . CommandChainPass::MAINCOMM_POSFIX
+            'ccc.command.foo'.CommandChainPass::MAINCOMM_POSFIX
         ));
         $this->assertTrue($container->hasDefinition(
-            'ccc.command.bar' . CommandChainPass::CHAINEDCOMM_POSFIX
+            'ccc.command.bar'.CommandChainPass::CHAINEDCOMM_POSFIX
         ));
     }
 }

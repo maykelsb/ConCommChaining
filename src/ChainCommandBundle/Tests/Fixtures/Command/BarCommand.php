@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This is a simple command class which says "bar".
  *
  * It is used in CommandChain tests.
+ *
  * @author Maykel S. Braz <maykelsb@yahoo.com.br>
  */
 class BarCommand extends Command
@@ -32,7 +33,7 @@ class BarCommand extends Command
     /**
      * Say "bar".
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)

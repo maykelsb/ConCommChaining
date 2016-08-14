@@ -20,16 +20,16 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class ChainCommandExtension extends Extension
 {
     /**
-     * Loads @ChainCommandBundle/Resources/config/services.yml
+     * Loads @ChainCommandBundle/Resources/config/services.yml.
      *
-     * @param array $configs
+     * @param array            $configs
      * @param ContainerBuilder $container
      */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../Resources/config')
+            new FileLocator(__DIR__.'/../Resources/config')
         );
         $loader->load('services.yml');
 
@@ -43,10 +43,10 @@ class ChainCommandExtension extends Extension
      */
     protected function loadChain(ContainerBuilder $container)
     {
-        if ('test' == $container->getParameter("kernel.environment")) {
+        if ('test' == $container->getParameter('kernel.environment')) {
             $loader = new YamlFileLoader(
                 $container,
-                new FileLocator(__DIR__ . '/../Tests/Fixtures/Resources/config')
+                new FileLocator(__DIR__.'/../Tests/Fixtures/Resources/config')
             );
 
             $loader->load('chain_foobar.yml');

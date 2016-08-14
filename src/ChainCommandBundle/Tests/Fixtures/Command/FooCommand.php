@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This is a simple command class which says "foo".
  *
  * It is used in CommandChain tests.
+ *
  * @author Maykel S. Braz <maykelsb@yahoo.com.br>
  */
 class FooCommand extends Command
@@ -32,7 +33,7 @@ class FooCommand extends Command
     /**
      * Say "foo".
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)

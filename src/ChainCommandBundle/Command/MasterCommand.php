@@ -70,11 +70,13 @@ class MasterCommand extends ContainerAwareCommand
      * Defines the id of the command service.
      *
      * @param string $commandId Service id of main command.
+     *
      * @return MasterCommand
      */
     public function setMainCommand($commandId)
     {
         $this->mainCommand = $commandId;
+
         return $this;
     }
 
@@ -82,11 +84,13 @@ class MasterCommand extends ContainerAwareCommand
      * Defines the list of chained commands.
      *
      * @param string[] $chainedCommands List of chained commands.
+     *
      * @return MasterCommand
      */
     public function setChainedCommands(array $chainedCommands)
     {
         $this->chainedCommands = $chainedCommands;
+
         return $this;
     }
 
@@ -104,20 +108,21 @@ class MasterCommand extends ContainerAwareCommand
      * First of all, the main command is found and executed. After that, all
      * commands in the chained list is called, one after another.
      *
-     * @param InputInterface $input Common input interface.
+     * @param InputInterface  $input  Common input interface.
      * @param OutputInterface $output Common output interface.
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (self::MASTER_COMM_NAME == $this->getName()) {
             $output->writeln('This command is not intended to be called by its actual name.');
+
             return 1;
         }
 
         // -- Executing main command
         $this->logHeader();
         $this->executeCommand(
-            $this->mainCommand . CommandChainPass::MAINCOMM_POSFIX,
+            $this->mainCommand.CommandChainPass::MAINCOMM_POSFIX,
             $input,
             $output
         );
@@ -126,7 +131,7 @@ class MasterCommand extends ContainerAwareCommand
         $this->getLogger()->info("Executing {$this->getName()} chain members:");
         foreach ($this->chainedCommands as $commandInfo) {
             $this->executeCommand(
-                $commandInfo['serviceid'] . CommandChainPass::CHAINEDCOMM_POSFIX,
+                $commandInfo['serviceid'].CommandChainPass::CHAINEDCOMM_POSFIX,
                 $input,
                 $output
             );
@@ -137,9 +142,9 @@ class MasterCommand extends ContainerAwareCommand
     /**
      * Execute a command and stores its output in log before show it on screen.
      *
-     * @param string $serviceId Service id to be called.
-     * @param InputInterface $input Common input interface.
-     * @param OutputInterface $output Common output interface.
+     * @param string          $serviceId Service id to be called.
+     * @param InputInterface  $input     Common input interface.
+     * @param OutputInterface $output    Common output interface.
      */
     protected function executeCommand(
         $serviceId,
@@ -166,10 +171,10 @@ class MasterCommand extends ContainerAwareCommand
     protected function logHeader()
     {
         $this->getLogger()->info("{$this->getName()} is a master command of a command"
-            . " chain that has registered member commands");
+            .' chain that has registered member commands');
         foreach ($this->chainedCommands as $commandInfo) {
             $this->getLogger()->info("{$commandInfo['commandname']} registered as a member of "
-                . "{$this->getName()} command chain");
+                ."{$this->getName()} command chain");
         }
         $this->getLogger()->info("Executing {$this->getName()} command itself first:");
     }

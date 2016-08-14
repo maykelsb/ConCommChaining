@@ -20,7 +20,7 @@ class HelloCommandTest extends KernelTestCase
         $comm = $app->find('foo:hello');
         $commTester = new CommandTester($comm);
         $exitCode = $commTester->execute([
-            'command' => $comm->getName()
+            'command' => $comm->getName(),
         ]);
 
         $this->assertEquals(0, $exitCode, 'Returns 0 in case of success');

@@ -21,16 +21,18 @@ trait TraitChainCommandTest
      * Loads the chain_foobar.yml file which declares the command chaining between foo and bar.
      *
      * @param ContainerBuilder $container
+     *
      * @return \ChainCommandBundle\Tests\DependencyInjection\Compiler\CommandChainPassTest
      */
     protected function chainCommands(ContainerBuilder $container)
     {
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/Fixtures/Resources/config')
+            new FileLocator(__DIR__.'/Fixtures/Resources/config')
         );
 
         $loader->load('chain_foobar.yml');
+
         return $this;
     }
 
@@ -38,12 +40,14 @@ trait TraitChainCommandTest
      * Calling CommandChainPass::process().
      *
      * @param ContainerBuilder $container
+     *
      * @return \ChainCommandBundle\Tests\DependencyInjection\Compiler\CommandChainPassTest
      */
     protected function process(ContainerBuilder $container)
     {
         $compilerPass = new CommandChainPass();
         $compilerPass->process($container);
+
         return $this;
     }
 }

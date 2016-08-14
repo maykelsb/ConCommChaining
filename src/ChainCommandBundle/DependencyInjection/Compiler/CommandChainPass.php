@@ -10,7 +10,6 @@ namespace ChainCommandBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-
 use ChainCommandBundle\Command\DummyCommand;
 use ChainCommandBundle\Command\MasterCommand;
 
@@ -23,6 +22,7 @@ use ChainCommandBundle\Command\MasterCommand;
  * executed too.
  *
  * Commands are identified by its service names.
+ *
  * @uses ChainCommandBundle\Command\DummyCommand
  */
 class CommandChainPass implements CompilerPassInterface
@@ -56,11 +56,13 @@ class CommandChainPass implements CompilerPassInterface
      * Sets a reference for the container builder.
      *
      * @param ContainerBuilder $container
+     *
      * @return \ChainCommandBundle\DependencyInjection\Compiler\CommandChainPass
      */
     protected function setContainer(ContainerBuilder $container)
     {
         $this->container = $container;
+
         return $this;
     }
 
@@ -119,7 +121,7 @@ class CommandChainPass implements CompilerPassInterface
         // -- called from MainCommand class
         $servDefinition = $this->getContainer()->findDefinition($serviceId);
         $this->getContainer()->setDefinition(
-            $serviceId . self::MAINCOMM_POSFIX,
+            $serviceId.self::MAINCOMM_POSFIX,
             clone $servDefinition
         );
 
@@ -155,7 +157,7 @@ class CommandChainPass implements CompilerPassInterface
 
         // -- Hidding it in another service, so it can only be called from its main command
         $this->getContainer()->setDefinition(
-            $serviceId . self::CHAINEDCOMM_POSFIX,
+            $serviceId.self::CHAINEDCOMM_POSFIX,
             clone $servDefinition
         );
 
@@ -208,7 +210,7 @@ class CommandChainPass implements CompilerPassInterface
      * If needed it starts a new command chain to add the new chainned command,
      * it also avoid repetitions when doing insertions.
      *
-     * @param string $mainCommand The main command service id.
+     * @param string $mainCommand    The main command service id.
      * @param string $chainedCommand The chained command service id.
      */
     protected function addToChain($mainCommand, $chainedCommand)
@@ -231,6 +233,7 @@ class CommandChainPass implements CompilerPassInterface
      * call Command::getClass() to retrieves the command name.
      *
      * @param Definition $definition Service definition of a command.
+     *
      * @return string Command name.
      */
     protected function retrieveCommandName(Definition $definition)
@@ -256,8 +259,9 @@ class CommandChainPass implements CompilerPassInterface
      *
      * Each call of this method, updates one command name.
      *
-     * @param string $serviceId Service id of a chainned command to be updated.
+     * @param string $serviceId   Service id of a chainned command to be updated.
      * @param string $commandName Command name to update.
+     *
      * @example
      * <code>
      * $this->commandChains = [

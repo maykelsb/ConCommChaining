@@ -35,11 +35,13 @@ class DummyCommand extends ContainerAwareCommand
      * Set the main command service id.
      *
      * @param string $mainCommandServiceId Main command service id.
+     *
      * @return \ChainCommandBundle\Command\DummyCommand
      */
     public function setMainCommandServiceId($mainCommandServiceId)
     {
         $this->mainCommandServiceId = $mainCommandServiceId;
+
         return $this;
     }
 
@@ -66,19 +68,20 @@ class DummyCommand extends ContainerAwareCommand
     /**
      * A basic execution.
      *
-     * @param InputInterface $input Common input interface.
+     * @param InputInterface  $input  Common input interface.
      * @param OutputInterface $output Common output interface.
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (self::DUMMY_COMM_NAME == $this->getName()) {
             $output->writeln('This command is not intended to be called by its actual name.');
+
             return 1;
         }
 
         $message = "Error: {$this->getName()} command is a member of "
-            . "{$this->getMainCommandName()} command chain and cannot be executed "
-            . "on its own.";
+            ."{$this->getMainCommandName()} command chain and cannot be executed "
+            .'on its own.';
 
         $output->writeln($message);
     }
