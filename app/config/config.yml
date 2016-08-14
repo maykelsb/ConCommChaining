@@ -68,9 +68,15 @@ swiftmailer:
     spool:     { type: memory }
 
 monolog:
+    channels: ["ccc"]
     handlers:
         file:
             bubble: false
             type: stream
-            channels: ["!event"]
+            channels: ccc
             formatter: ccc_log_formatter
+            level: info
+            path: %kernel.logs_dir%/log_ccc.log
+        syslog_handler:
+            type: syslog
+            level: error
