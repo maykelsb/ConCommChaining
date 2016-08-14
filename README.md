@@ -45,12 +45,15 @@ Right now, you will have to copy the src folder content to your project and made
 * On you `app/config/config.yml` configure monolog as shown bellow:
 ```
 monolog:
+    channels: ["ccc"]
     handlers:
         file:
             bubble: false
             type: stream
-            channels: ["!event"]
+            channels: ccc
             formatter: ccc_log_formatter
+            level: info
+            path: %kernel.logs_dir%/log_ccc.log
 ```
 Note: A fullstack Symfony is required.
 
@@ -59,4 +62,4 @@ To chain commands, you have to tag a chained command with the `chaincommand.chai
 done setting the main command service name. A sample tag: `- { name: chaincommand.chained, chainto: foo.hello_command }`.
 
 ## Logging
-All log is registered inside the main log file corresponding to your enviroment. `dev.log` or `prod.log`.
+All log is registered inside of a custom log file called `log_ccc.log`.
