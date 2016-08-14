@@ -28,6 +28,11 @@ use Symfony\Component\Console\Output\StreamOutput;
 class MasterCommand extends ContainerAwareCommand
 {
     /**
+     * The true name of DummyCommand.
+     */
+    const MASTER_COMM_NAME = 'ccc:master';
+
+    /**
      * @var string The service id of the main command.
      */
     protected $mainCommand;
@@ -103,6 +108,11 @@ class MasterCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (self::MASTER_COMM_NAME == $this->getName()) {
+            $output->writeln('This command is not intended to be called by its actual name.');
+            return 1;
+        }
+
         // -- Executing main command
         $this->logHeader();
         $this->executeCommand(

@@ -1,4 +1,7 @@
 <?php
+/**
+ * This test is part of ChainCommandBundle test suite.
+ */
 
 namespace ChainCommandBundle\Tests\Command;
 
@@ -13,6 +16,11 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * Tests DummyCommand verifying its status and exit code.
+ *
+ * @author Maykel S. Braz <maykelsb@yahoo.com.br>
+ */
 class DummyCommandTest extends KernelTestCase
 {
     use TraitChainCommandTest;
@@ -30,7 +38,7 @@ class DummyCommandTest extends KernelTestCase
             'command' => $comm->getName()
         ]);
 
-        $this->assertEquals(1, $exitCode, 'Returns 1 when called by its actual name.');
+        $this->assertEquals(1, $exitCode, 'Returns %1 when called by its actual name.');
         $this->assertEquals(
             "This command is not intended to be called by its actual name.\n",
             $commTester->getDisplay()
