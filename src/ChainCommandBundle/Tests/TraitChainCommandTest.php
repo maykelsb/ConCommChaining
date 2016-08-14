@@ -3,7 +3,7 @@
  * This test is part of ChainCommandBundle test suite.
  */
 
-namespace ChainCommandBundle\Tests\DependencyInjection\Compiler;
+namespace ChainCommandBundle\Tests;
 
 use ChainCommandBundle\DependencyInjection\Compiler\CommandChainPass;
 use Symfony\Component\Config\FileLocator;
@@ -11,32 +11,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
- * Tests CommandChainPass verifying if the service substitution takes places.
+ * This trait implements some methods used by tests.
  *
  * @author Maykel S. Braz <maykelsb@yahoo.com.br>
  */
-class CommandChainPassTest extends \PHPUnit_Framework_TestCase
+trait TraitChainCommandTest
 {
-    /**
-     * Testing CommandChainPass::process().
-     */
-    public function testProcess()
-    {
-        // -- Configuring the container and processing it
-        $container = new ContainerBuilder();
-        $this->chainCommands($container)
-            ->process($container);
-
-        $this->assertTrue($container->hasDefinition('ccc.command.foo'));
-        $this->assertTrue($container->hasDefinition('ccc.command.bar'));
-        $this->assertTrue($container->hasDefinition(
-            'ccc.command.foo' . CommandChainPass::MAINCOMM_POSFIX
-        ));
-        $this->assertTrue($container->hasDefinition(
-            'ccc.command.bar' . CommandChainPass::CHAINEDCOMM_POSFIX
-        ));
-    }
-
     /**
      * Loads the chain_foobar.yml file which declares the command chaining between foo and bar.
      *
@@ -47,7 +27,7 @@ class CommandChainPassTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../../../Fixtures/Resources/config')
+            new FileLocator(__DIR__ . '/Fixtures/Resources/config')
         );
 
         $loader->load('chain_foobar.yml');
@@ -67,3 +47,4 @@ class CommandChainPassTest extends \PHPUnit_Framework_TestCase
         return $this;
     }
 }
+
