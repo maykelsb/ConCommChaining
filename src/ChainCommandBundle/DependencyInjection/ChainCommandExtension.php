@@ -31,7 +31,24 @@ class ChainCommandExtension extends Extension
             $container,
             new FileLocator(__DIR__ . '/../Resources/config')
         );
-
         $loader->load('services.yml');
+    }
+
+    /**
+     * Loads @ChainCommandBundle/Tests/Fixtures/Resources/config/chain_foobar.yml for test environment.
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function loadChain(ContainerBuilder $container)
+    {
+        if ('test' == $container->getParameter("kernel.environment")) {
+
+            $loader = new YamlFileLoader(
+                $container,
+                new FileLocator(__DIR__ . '/../Tests/Fixtures/Resources/config')
+            );
+
+            $loader->load('chain_foobar.yml');
+        }
     }
 }

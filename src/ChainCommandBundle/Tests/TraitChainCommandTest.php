@@ -47,4 +47,3 @@ trait TraitChainCommandTest
         return $this;
     }
 }
-

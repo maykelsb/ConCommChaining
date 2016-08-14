@@ -3,21 +3,28 @@
 namespace ChainCommandBundle\Tests\Command;
 
 use ChainCommandBundle\Command\DummyCommand;
+use ChainCommandBundle\Command\MasterCommand;
+use ChainCommandBundle\Tests\Fixtures\Command\BarCommand;
+use ChainCommandBundle\Tests\Fixtures\Command\FooCommand;
+use ChainCommandBundle\Tests\TraitChainCommandTest;
+
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Application;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+
 use Symfony\Component\Console\Tester\CommandTester;
 
 class DummyCommandTest extends KernelTestCase
 {
+    use TraitChainCommandTest;
+
     public function testExecute()
     {
-        $kernel = $this->createKernel(['test']);
-        $kernel->boot();
+        self::bootKernel();
 
-        $app = new Application($kernel);
+        $app = new Application(self::$kernel);
         $app->add(new DummyCommand());
 
-        $comm = $app->find('ccc:dummy');
+        $comm = $app->find(DummyCommand::DUMMY_COMM_NAME);
         $commTester = new CommandTester($comm);
         $exitCode = $commTester->execute([
             'command' => $comm->getName()
@@ -32,26 +39,40 @@ class DummyCommandTest extends KernelTestCase
 
 //    public function testExecuteWhenHiddingAChainedCommand()
 //    {
-//        $kernel = $this->createKernel();
-//        $kernel->registerBundles(function(){
-//            return [
-//                new FooBundle\FooBundle(),
-//                new BarBundle\BarBundle()
-//            ];
-//        });
-//
-//
-//        $kernel->boot();
-//
-//        $app = new Application($kernel);
+//        self::bootKernel();
+//        $app = new Application(self::$kernel);
 //        $app->add(new DummyCommand());
+//        $app->add(new MasterCommand());
+//        $app->add(new FooCommand());
+//        $app->add(new BarCommand());
 //
-//        $chainedCommandName = 'foo:hello';
+//        $contBuilder = new \Symfony\Component\DependencyInjection\ContainerBuilder();
+//        $this->chainCommands($contBuilder)
+//            ->process($contBuilder);
 //
-//        $comm = $app->find($chainedCommandName);
-//        $commTester = new CommandTester($comm);
+//        self::$kernel->getContainer()->set(
+//            'ccc.command.foo',
+//            $contBuilder->get('ccc.command.foo')
+//        );
+//        self::$kernel->getContainer()->set(
+//            'ccc.command.bar',
+//            $contBuilder->get('ccc.command.bar')
+//        );
+//        self::$kernel->getContainer()->set(
+//            'ccc.command.foo' . \ChainCommandBundle\DependencyInjection\Compiler\CommandChainPass::MAINCOMM_POSFIX,
+//            $contBuilder->get('ccc.command.foo' . \ChainCommandBundle\DependencyInjection\Compiler\CommandChainPass::MAINCOMM_POSFIX)
+//        );
+//        self::$kernel->getContainer()->set(
+//            'ccc.command.bar' . \ChainCommandBundle\DependencyInjection\Compiler\CommandChainPass::CHAINEDCOMM_POSFIX,
+//            $contBuilder->get('ccc.command.bar' . \ChainCommandBundle\DependencyInjection\Compiler\CommandChainPass::CHAINEDCOMM_POSFIX)
+//        );
+//
+//        $chainedCommandName = 'ccc:bar';
+//        $command = $app->find($chainedCommandName);
+//
+//        $commTester = new CommandTester($command);
 //        $exitCode = $commTester->execute([
-//            'command' => $comm->getName()
+//            'command' => $command->getName()
 //        ]);
 //
 //        $this->assertEquals(0, $exitCode, 'When hidding a chained command returns 0.');
@@ -61,4 +82,3 @@ class DummyCommandTest extends KernelTestCase
 //        );
 //    }
 }
-
